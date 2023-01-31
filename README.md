@@ -58,7 +58,7 @@ After successully created MQTT brocker, we will create a instance into the AWS C
 
 4. The we will configure the network settings of the border router.  
 
-       ```
+        ```
 		root@node-a8-1:~# cd ~/A8/riot/RIOT/dist/tools/uhcpd
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
 		```
