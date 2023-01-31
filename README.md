@@ -56,25 +56,25 @@ After successully created MQTT brocker, we will create a instance into the AWS C
 		root@node-a8-1:~# flash_a8_m3 gnrc_border_router.elf
 		```
 
-4. The we will configure the network settings of the border router      
+4. The we will configure the network settings of the border router.  
 
-        ```
+       ```
 		root@node-a8-1:~# cd ~/A8/riot/RIOT/dist/tools/uhcpd
-        root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
-		```  
+		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
+		```
 
     Compile the ethos tool as well and configuire it on the node's public IPv6 network:
 
         ```
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# cd ../ethos
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/ethos# make clean all
-        ```
+		```
 
     Then we will run `printenv` for getting prefix directly on the A8 node.
 
         ```
-        root@node-a8-1:~# printenv
-        ```
+		root@node-a8-1:~# printenv
+		```
         
     On the border router, the network can finally be configured automatically using the following commands:
 
