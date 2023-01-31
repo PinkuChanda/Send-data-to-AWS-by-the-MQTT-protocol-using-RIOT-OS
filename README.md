@@ -57,31 +57,32 @@ After successully created MQTT brocker, we will create a instance into the AWS C
 		```
 
 4. The we will configure the network settings of the border router      
+
         ```
 		root@node-a8-1:~# cd ~/A8/riot/RIOT/dist/tools/uhcpd
-		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
+        root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
 		```  
 
-        Compile the ethos tool as well and configuire it on the node's public IPv6 network:
+    Compile the ethos tool as well and configuire it on the node's public IPv6 network:
 
         ```
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# cd ../ethos
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/ethos# make clean all
         ```
 
-        Then we will run `printenv` for getting prefix directly on the A8 node.
+    Then we will run `printenv` for getting prefix directly on the A8 node.
 
         ```
         root@node-a8-1:~# printenv
         ```
         
-        On the border router, the network can finally be configured automatically using the following commands:
+    On the border router, the network can finally be configured automatically using the following commands:
 
         ```
         root@node-a8-1:~/A8/riot/RIOT/dist/tools/ethos# ./start_network.sh /dev/ttyA8_M3 tap0 IPv6_prifix 500000
 		```
 
-        Then we will get output similar to that shown below will be displayed.
+    Then we will get output similar to that shown below will be displayed.
 
         ```
 		net.ipv6.conf.tap0.forwarding = 1
