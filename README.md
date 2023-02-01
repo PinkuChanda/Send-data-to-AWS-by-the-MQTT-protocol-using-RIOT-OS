@@ -11,9 +11,11 @@ Using RIOT OS on three A8-M3 nodes in FIT/IoT-LAB, we will develop the MQTT prot
 * The second node will be used as an MQTT broker
 * The third node will run an MQTT-SN client to connect with the broker.
 
-After successully created MQTT brocker, we will create a instance into the AWS Cloud and here we will take the AWS EC2 service. 
+After successully created MQTT brocker, we will create a instance into the AWS Cloud and here we will take the AWS EC2 service. In AWS we will create a brocker then we will make a bridge between two brocker.  
 
 
+![Send data to AWS by the MQTT protocol using RIOT-OS](/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS
+/assets/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS.jpg)
 
 
 ## Local Implementation using RIOT-OS
@@ -56,33 +58,35 @@ After successully created MQTT brocker, we will create a instance into the AWS C
 		root@node-a8-1:~# flash_a8_m3 gnrc_border_router.elf
 		```
 
-4. The we will configure the network settings of the border router      
+4. The we will configure the network settings of the border router.  
+
+    * In the first node to compile too named `uhcpd`
 
         ```
 		root@node-a8-1:~# cd ~/A8/riot/RIOT/dist/tools/uhcpd
-        root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
-		```  
+		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# make clean all
+		```
 
-    Compile the ethos tool as well and configuire it on the node's public IPv6 network:
+    * Compile the ethos tool as well and configuire it on the node's public IPv6 network:
 
         ```
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/uhcpd# cd ../ethos
 		root@node-a8-1:~/A8/riot/RIOT/dist/tools/ethos# make clean all
-        ```
+		```
 
-    Then we will run `printenv` for getting prefix directly on the A8 node.
+    * Then we will run `printenv` for getting prefix directly on the A8 node.
 
         ```
-        root@node-a8-1:~# printenv
-        ```
+		root@node-a8-1:~# printenv
+		```
         
-    On the border router, the network can finally be configured automatically using the following commands:
+    * On the border router, the network can finally be configured automatically using the following commands:
 
         ```
         root@node-a8-1:~/A8/riot/RIOT/dist/tools/ethos# ./start_network.sh /dev/ttyA8_M3 tap0 IPv6_prifix 500000
 		```
 
-    Then we will get output similar to that shown below will be displayed.
+    * Then we will get output similar to that shown below will be displayed.
 
         ```
 		net.ipv6.conf.tap0.forwarding = 1
@@ -157,6 +161,8 @@ After successully created MQTT brocker, we will create a instance into the AWS C
 
 7. Test the publish/subscribe mechanism between the MQTT broker and client nodes using a fourth terminal.
 
+    * Connect to the Grenoble SSH frontend and use the preinstalled mosquitto pub command to send the message "FUAS-RIOT-LAB" to the MQTT broker, referencing the global IPv6 address set in step 5 and the topic name should be test/riot:
+
         ```
 		your_computer$ ssh <username>@grenoble.iot-lab.info
 		username@grenoble:~$ mosquitto_pub -h 2001:660:3207:400::66 -p 1886 -t test/riot -m FUAS-RIOT-LAB
@@ -172,7 +178,7 @@ After successully created MQTT brocker, we will create a instance into the AWS C
 
 ## AWS Implementation         
 
-1. After Successfully created the AWS EC2 instance we will get a IPv4 public IP and will get a range of port as well as configuration key. Then take a another terminal for creating AWS brocker into the AWS EC2 insentace. 
+1. After Successfully created the AWS EC2 instance we will get a IPv4 public IP and will get a range of port as well as configuration key. Then take a another terminal for creating a brocker into the AWS EC2 insentace. 
 
     ```
     my_computer:~$ sudo ssh -i security_key.pem ubuntu@AWS_Public_IP
@@ -204,14 +210,31 @@ After successully created MQTT brocker, we will create a instance into the AWS C
     mosquitto_sub -h AWS_Public_IP -p PORT -t test/riot 
     ```
 
-Then go to the brocker node into the Local Implementation (step 5), for making bridge run this following comand in the right directory:
+3. Then create a new configuration file and set a port number (replace your port), as following our file `bridge.cnf`.
 
+    ```
+    listener 1890 #Replace with your local port
+
+    allow_anonymous true
+
+    connection conn-broker1
+
+    address 52.72.16.87:1891 #Replace with your AWS Public IP and port
+
+    topic # both 0
+    topic house/sensor out 0 b1/ ""
+    topic house/lamp in 0 ""  b2/
+
+    remote_clientid broker1
+    ```
+
+* Then go to the brocker node into the Local Implementation (step 5), for making bridge run this following comand in the right directory:
     ```
     root@node-a8-104:~/A8/riot/RIOT/dist/tools/mosquitto_rsmb# mosquitto -c bridge.cnf
     ```
 
-After successfully bridge between two brocker we will publish from local client
+* After successfully bridge between two brocker we will publish from local client.
 
     ```
-    mosquitto_pub -h 2001:660:5307:3000::68 -p 1890 -t test/riot -m Hello-RIOT
+    mosquitto_pub -h 2001:660:5307:3000::68 -p PORT -t test/riot -m Hello-RIOT
     ```
