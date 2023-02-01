@@ -14,8 +14,7 @@ Using RIOT OS on three A8-M3 nodes in FIT/IoT-LAB, we will develop the MQTT prot
 After successully created MQTT brocker, we will create a instance into the AWS Cloud and here we will take the AWS EC2 service. In AWS we will create a brocker then we will make a bridge between two brocker.  
 
 
-![Send data to AWS by the MQTT protocol using RIOT-OS](/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS
-/assets/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS.jpg)
+![Send data to AWS by the MQTT protocol using RIOT-OS](https://github.com/PinkuChanda/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS/blob/main/assets/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS.jpg)
 
 
 ## Local Implementation using RIOT-OS
