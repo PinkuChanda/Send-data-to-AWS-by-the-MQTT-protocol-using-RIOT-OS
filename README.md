@@ -1,4 +1,4 @@
-# Send data to AWS by the MQTT protocol using RIOT-OS
+# Send data to AWS by the MQTT protocol using [RIOT-OS](https://www.riot-os.org/)
 Send the data by the MQTT protocol and its constrained variant, called MQTT-SN, using RIOT OS on three A8-M3 nodes in FIT/IoT-LAB.
 
 ## Abstract
@@ -186,7 +186,7 @@ After successully created MQTT brocker, we will create a instance into the AWS C
     my_computer:~$ sudo ssh -i security_key.pem ubuntu@AWS_Public_IP
     ```
 
-    After successfully login by the IP address, then we will run following commands:
+    After successfully login by the IP address, then we will run following commands to install mosquitto:
 
     ```
     ubuntu@ip-172-31-62-165:~$sudo apt-get update
@@ -206,7 +206,7 @@ After successully created MQTT brocker, we will create a instance into the AWS C
     mosquitto -c aws-config.conf
     ```
 
-2. Open a sencond terminal for AWS, here we will subscribe with AWS public IP as well as port
+2. Open a sencond terminal for AWS, here we will subscribe with AWS public IP as well as the port number.
 
     ```
     mosquitto_sub -h AWS_Public_IP -p PORT -t test/riot 
@@ -234,9 +234,19 @@ After successully created MQTT brocker, we will create a instance into the AWS C
     ```
     root@node-a8-104:~/A8/riot/RIOT/dist/tools/mosquitto_rsmb# mosquitto -c bridge.cnf
     ```
+* After successfully connected the bridge, subscribe form AWS client.
+    ```
+    mosquitto_sub -h AWS_Public_IP -p PORT -t test/riot
+    ```
 
-* After successfully bridge between two brocker we will publish from local client.
+* Then we will publish from the local client as static data ( from step 7) run the following command with same topic (test/riot).
 
     ```
-    mosquitto_pub -h 2001:660:5307:3000::68 -p PORT -t test/riot -m Hello-RIOT
+    while :; do mosquitto_pub -h 2001:660:5307:3000::68 -p PORT -t test/riot -m temp-12-degree; sleep 1 ;
     ```
+
+Then we will get output same to that shown below will be displayed.
+
+<p align="center">
+  <img src="https://github.com/PinkuChanda/Send-data-to-AWS-by-the-MQTT-protocol-using-RIOT-OS/blob/main/assets/temperature.png">
+</p>
